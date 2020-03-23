@@ -84,12 +84,27 @@ def FindReferenceSystem2(video_path):
 
     diffmask = np.diff(smoothfiltered,n=1)
 
-    PeaksNO2 , values = sig.find_peaks(diffmask, height = 1)
+    PeaksNO2 , values = sig.find_peaks(diffmask, height = 0.01)
 
-    if np.size(PeaksNO2) == 1 : 
-        Peaks3 = ((PeaksNO2 [0])  - 15)
-        Peaks4 = ((PeaksNO2 [0])  + 10)
-        return [Peaks3,Peaks4]
+    list1 = []
+
+    if np.size(PeaksNO2) > 1: 
+
+        var_Peaks = 1
+        height = 0.01
+
+        while np.size(PeaksNO2) > var_Peaks :
+            height = height +0.01
+            PeaksNO2_2 , values = sig.find_peaks(diffmask, height)
+
+            if np.size(PeaksNO2_2) == 1:
+                list1.append(PeaksNO2_2)
+                break
+
+    Peaks3 = ((list1 [0])  - 15)
+    Peaks4 = ((list1 [0])  + 10)
+    
+    return [Peaks3,Peaks4]
 
 
 
