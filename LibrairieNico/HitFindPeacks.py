@@ -92,19 +92,22 @@ def FindReferenceSystem2(video_path):
 
         var_Peaks = 1
         height = 0.01
-
+        TakenHeight = []
+        
         while np.size(PeaksNO2) > var_Peaks :
             height = height +0.01
             PeaksNO2_2 , values = sig.find_peaks(diffmask, height)
-
+            
             if np.size(PeaksNO2_2) == 1:
                 list1.append(PeaksNO2_2)
+                TakenHeight.append(height)
                 break
-
+                
+    Treshold = (TakenHeight[0])
     Peaks3 = ((list1 [0])  - 15)
-    Peaks4 = ((list1 [0])  + 10)
+    Peaks4 = ((list1 [0])  + 15)
     
-    return [Peaks3,Peaks4]
+    return [Peaks3,Peaks4,Treshold]
 
 
 
