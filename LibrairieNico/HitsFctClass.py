@@ -22,7 +22,6 @@ from scipy import signal as sig
 import pandas as pd
 import numpy as np
 
-
 def smooth(x,window_len=11,window='hanning'):
     """smooth the data using a window with requested size.
     
@@ -97,8 +96,6 @@ def Easyinterp(Input):
 def diff(Input1):
     X = np.diff(abs(Input1), n=1)
     return X
-
-
 
 def calculateNewSize(width,height,WishForNEwWidth):
     ratio = WishForNEwWidth/width
