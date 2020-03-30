@@ -23,6 +23,8 @@ import pandas as pd
 import numpy as np
 
 
+sys.path.append(r'C:\Users\Nicolas\Documents\GitHub\WorkScripts')
+from LibrairieNico.HitsFctClass import smooth, Easyinterp, diff, calculateNewSize, getSigmoidEdgePeak, sigmoid
 
 
 def FindReferenceSystem(video):
@@ -65,22 +67,22 @@ def FindReferenceSystem(video):
         else :
             continue 
 
-def FindReferenceSystem2(video_path):
+def FindReferenceSystem2(video_path,height):
     
     HandleBEHAV = cv2.VideoCapture(video_path, 0)
     length = int(HandleBEHAV.get(cv2.CAP_PROP_FRAME_COUNT))
     
     _ , IMG1 = HandleBEHAV.read()
 
-    linemask2= IMG1[601:602, : , 0]
+    linemask2= IMG1[height, : , 0]
 
     linemask2 = np.invert(linemask2)
     linemask2 = linemask2.flatten()
 
     smoothmask = smooth(linemask2)
 
-    b, a = butter(8, 0.075)
-    smoothfiltered = filtfilt(b, a, smoothmask)
+    b, a = sig.butter(8, 0.075)
+    smoothfiltered = sig.filtfilt(b, a, smoothmask)
 
     diffmask = np.diff(smoothfiltered,n=1)
 
@@ -99,16 +101,25 @@ def FindReferenceSystem2(video_path):
             PeaksNO2_2 , values = sig.find_peaks(diffmask, height)
             
             if np.size(PeaksNO2_2) == 1:
-                list1.append(PeaksNO2_2)
+                list1.append(PeaksNO2_2[0])
                 TakenHeight.append(height)
                 break
                 
     Treshold = (TakenHeight[0])
-    Peaks3 = ((list1 [0])  - 15)
-    Peaks4 = ((list1 [0])  + 15)
+    Peaks3 = ((list1 [0])  - 20)
+    Peaks4 = ((list1 [0])  + 20)
+    
+    if Peaks3 < 0 :
+        Peaks3 = 0
+    if Peaks4 < 0 :
+        Peaks4 = 0
+        
+    if Peaks3 > np.shape(IMG1)[1] :
+        Peaks3 = np.shape(IMG1)[1]
+    if Peaks4 > np.shape(IMG1)[1] :
+        Peaks4 = np.shape(IMG1)[1]
     
     return [Peaks3,Peaks4,Treshold]
-
 
 
 def OscObj2 (video_path): 
@@ -142,7 +153,7 @@ def OscObj2 (video_path):
         interpol_img = np.vstack((interpol_img,interpol_img,interpol_img,interpol_img,interpol_img,interpol_img,interpol_img,interpol_img,interpol_img,interpol_img))
 
         b, a = butter(8, 0.075)
-        smoothfiltered = filtfilt(b, a, raw_interp)
+        smoothfiltered = sig.filtfilt(b, a, raw_interp)
 
         diffmask = np.diff(smoothfiltered,n=1)
 
@@ -257,3 +268,44 @@ def HitDetection(Trial):
         with open(outfile,'wb') as pickleHandle:
             whatever = pickle.dump(Listframe, pickleHandle)
     print('La liste des frames inclues dans l\'interval est :', (Listframe), ' video' , os.path.basename(Trial) [:-4] )  
+    
+def getHIT_LINE(Image,h_position,slice_pos,**kwargs):
+    
+    if 'reverse' in kwargs :
+        DOreverse = kwargs.get('reverse')
+    else : 
+        DOreverse = False
+        
+    if 'clahe' in kwargs :
+        DOclahe = kwargs.get('clahe')
+        if DOclahe.__class__.__name__ == 'CLAHE':
+            claheobj = DOclahe
+            DOclahe = True
+        elif DOclahe is True:
+            claheobj = cv2.createCLAHE(clipLimit=2.0, tileGridSize=(32,32))
+
+    else:
+        DOclahe = False
+        
+    if 'axis' in kwargs :
+        axis = kwargs.get('axis')
+    else:
+        axis = 0
+    
+    if len(np.shape(Image)) > 2 :
+        Image = Image[:,:,0]
+        
+    if DOreverse :
+        Image = cv2.bitwise_not(Image)
+
+    if DOclahe :
+        Image = claheobj.apply(Image)
+
+    if axis == 0:
+        Slice = Image[int(slice_pos[0]):int(slice_pos[1]),h_position]
+    elif axis == 1:
+        Slice = Image[h_position,int(slice_pos[0]):int(slice_pos[1])]
+    else:
+        raise ValueError(f"Axis :{axis} is out of shape for 2D image of dimension {np.shape(Image)} with {len(np.shape(Image))} axes(starting at 0)")
+    
+    return np.reshape(Slice, (1, np.size(Slice)))
