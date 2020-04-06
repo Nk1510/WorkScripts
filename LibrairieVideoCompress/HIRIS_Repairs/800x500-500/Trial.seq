@@ -1,0 +1,22 @@
+[Sequence Settings]
+Sequence name=Trial
+CommentSize=0
+Comment=
+Number of files=500
+Mode=2
+Format=1
+Agregat=1
+Width=800
+Height=500
+BytesPerPixel=1
+BitsPerPixel=8
+Image dimension=1
+FramePerSecond=-1
+Bin directory=E:\\WAITINGPROCESS\BehavioralVideos\Whisker_Video\Whisker_Sideview\Expect_1\Mouse24\200207_1\2020-02-07T10.40.41\
+Bin repertoire=
+Bin File=Trial_
+Start Time=10:40:41
+TrigType=-1
+TrigTime=0
+TimeTrig=90326.713544
+T0=90326.713544

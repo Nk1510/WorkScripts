@@ -1,0 +1,22 @@
+[Sequence Settings]
+Sequence name=Trial
+CommentSize=0
+Comment=
+Number of files=500
+Mode=2
+Format=1
+Agregat=1
+Width=1024
+Height=720
+BytesPerPixel=1
+BitsPerPixel=8
+Image dimension=1
+Bin directory=C:\Users\ADMIN\Python\HIRIS_Repairs\1024x720-500\2020-02-09T16.59.07
+Bin repertoire=2020-02-09T16.59.07
+Bin File=Trial_
+Start Time=16:59:07
+TrigType=-1
+TrigTime=0
+TimeTrig=176297.027057
+FramePerSecond=31.1
+T0=176297.027057

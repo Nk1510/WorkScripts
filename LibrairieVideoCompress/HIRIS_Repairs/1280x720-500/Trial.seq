@@ -1,0 +1,22 @@
+[Sequence Settings]
+Sequence name=Trial
+CommentSize=0
+Comment=
+Number of files=500
+Mode=2
+Format=1
+Agregat=1
+Width=1280
+Height=720
+BytesPerPixel=1
+BitsPerPixel=8
+Image dimension=1
+Bin directory=F:\MazeWhiskerImaging\BehavioralVideos\Whisker_Topview\Expect_1\Mouse25\200207_2\2020-02-07T16.20.16
+Bin repertoire=2020-02-07T16.20.16
+Bin File=Trial_
+Start Time=16:20:16
+TrigType=-1
+TrigTime=0
+TimeTrig=1160.133266
+FramePerSecond=499.6
+T0=1160.133266
